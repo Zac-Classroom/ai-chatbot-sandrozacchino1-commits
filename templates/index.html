@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <title>Mia Pagina</title>
+    <style>
+
+        #output {
+            background-color: rgb(255, 246, 235);
+            padding: 2rem;
+
+            .message {
+                padding: 5px;
+                border-radius: 1rem;
+                position: relative; 
+                width: 50%;
+                
+                &.user {
+                    text-align: right;
+                    background-color: rgb(242, 255, 242);
+                    left: 50%;
+                    &::before {
+                        content: "👤 Utente";
+                        display: block;
+                        padding: 5px 0;
+                        font-weight: bold;
+                    }
+                    
+                }
+
+                &.bot {
+                    background-color: rgb(255, 255, 255);
+                    &::before {
+                        content: "🤖 Bot";
+                        display: block;
+                        padding: 5px 0;
+                        font-weight: bold;
+                    }
+                }
+
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Assistente Vocale</h1>
+
+        <input type="text" name="nome" id="nome">
+        <button onclick="invia()">Invia</button>
+        <div id="output"></div>
+    </div>
+
+
+    <script>
+        async function invia() {
+            var elem = document.getElementById("nome");
+            var nome = elem.value;
+            document.getElementById("output").innerHTML += `<div class="message user">${nome}</div>`;
+            var response = await fetch("/comando/" + nome , {
+                "headers": {
+                    "Content-Type": "application/json"
+                }
+            });
+            var testo = await response.text();
+            document.getElementById("output").innerHTML += `<div class="message bot">${testo}</div>`;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  
+</body>
+</html>
